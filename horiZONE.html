@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="Create Stellarium horizons from heywhatsthat.com panoramas">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css">
+	  <style>
+         .navbar {
+         background-color: #563D7C !important;
+         }
+         .navbar .navbar-brand {
+         color: #ecf0f1;
+         }
+         .navbar .navbar-brand:hover,
+         .navbar .navbar-brand:focus {
+         color: #f9f9f9;
+         }
+         .navbar .navbar-text {
+         color: #ecf0f1;
+         }
+         .navbar .navbar-text a {
+         color: #f9f9f9;
+         }
+         .navbar .navbar-text a:hover,
+         .navbar .navbar-text a:focus {
+         color: #f9f9f9; 
+         }
+         .navbar .navbar-nav .nav-link {
+         color: #ecf0f1;
+         border-radius: .25rem;
+         margin: 0 0.25em;
+         }
+         .navbar .navbar-nav .nav-link:not(.disabled):hover,
+         .navbar .navbar-nav .nav-link:not(.disabled):focus {
+         color: #f9f9f9;
+         }
+         .navbar .navbar-nav .nav-item.active .nav-link,
+         .navbar .navbar-nav .nav-item.active .nav-link:hover,
+         .navbar .navbar-nav .nav-item.active .nav-link:focus,
+         .navbar .navbar-nav .nav-item.show .nav-link,
+         .navbar .navbar-nav .nav-item.show .nav-link:hover,
+         .navbar .navbar-nav .nav-item.show .nav-link:focus {
+         color: #f9f9f9;
+         background-color: #563D7C;
+         }
+         .navbar .navbar-toggle {
+         border-color: #5bc0de;
+         }
+         .navbar .navbar-toggle:hover,
+         .navbar .navbar-toggle:focus {
+         background-color: #5bc0de;
+         }
+         .navbar .navbar-toggle .navbar-toggler-icon {
+         color: #ecf0f1;
+         }
+         .navbar .navbar-collapse,
+         .navbar .navbar-form {
+         border-color: #ecf0f1;
+         }
+         .navbar .navbar-link {
+         color: #ecf0f1;
+         }
+         .navbar .navbar-link:hover {
+         color: #f9f9f9;
+         }
+         @media (max-width: 575px) {
+         .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item {
+         color: #ecf0f1;
+         }
+         .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+         .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+         color: #f9f9f9;
+         }
+         .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item.active {
+         color: #f9f9f9;
+         background-color: #5bc0de;
+         }
+         }
+         @media (max-width: 767px) {
+         .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item {
+         color: #ecf0f1;
+         }
+         .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+         .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+         color: #f9f9f9;
+         }
+         .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item.active {
+         color: #f9f9f9;
+         background-color: #5bc0de;
+         }
+         }
+         @media (max-width: 991px) {
+         .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item {
+         color: #ecf0f1;
+         }
+         .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+         .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+         color: #f9f9f9;
+         }
+         .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item.active {
+         color: #f9f9f9;
+         background-color: #5bc0de;
+         }
+         }
+         @media (max-width: 1199px) {
+         .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item {
+         color: #ecf0f1;
+         }
+         .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+         .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+         color: #f9f9f9;
+         }
+         .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item.active {
+         color: #f9f9f9;
+         background-color: #5bc0de;
+         }
+         }
+         .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
+         color: #ecf0f1;
+         }
+         .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+         .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+         color: #f9f9f9;
+         }
+         .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
+         color: #f9f9f9;
+         background-color: #5bc0de;
+         }
+         body {
+         margin: 0;
+         padding: 0;
+         }
+         
+         
+         
+      </style>
+      <title>horiZONE</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>	  
+      <script>
+         $(document).ready(function () {
+         // set up event handlers on input boxes
+         $('#hwtID').change(function () {
+          hwtUpdate();
+         });
+         });
+         
+         function updateINILocation() {
+         var LocationInput = document.getElementById('LocationInput').value;
+         document.getElementById('Location').innerHTML = LocationInput;
+         }
+         
+         function updateINILat() {
+         var LatInput = document.getElementById('LatInput').value;
+         document.getElementById('Lat').innerHTML = LatInput;
+         }
+         
+         function updateINILng() {
+         var LngInput = document.getElementById('LngInput').value;
+         document.getElementById('Lng').innerHTML = LngInput;
+         }
+         
+         function updateINItimezone() {
+         var timezoneInput = document.getElementById('timezoneInput').value;
+         document.getElementById('timezone').innerHTML = timezoneInput;
+         }
+         
+         function updateINIinverted() {
+         var invertedInput = document.getElementById('inverseSwitch').value;
+         document.getElementById('inverted').innerHTML = invertedInput;
+         }
+         
+         function updateINIauthor() {
+         var authorInput = document.getElementById('authorInput').value;
+         document.getElementById('author').innerHTML = authorInput;
+         }
+         
+         function updateINIdescription() {
+         var descriptionInput = document.getElementById('descriptionInput').value;
+         document.getElementById('description').innerHTML = descriptionInput;
+         }
+         
+         function updateINIaltitude() {
+         var altitudeInput = document.getElementById('altitudeInput').value;
+         document.getElementById('altitude').innerHTML = altitudeInput;
+         } 
+         $(document).ready(function () {
+          $(".add-row").click(function () {
+             var azimuth = $("#azimuth").val();
+             var galtitude = $("#galtitude").val();
+             var dtz = $("#dtz").val();
+             var azshift = $("#azshift").val();
+             var label = $("#label").val();
+             var markup = "<tr><td><input type='checkbox' azimuth='record'></td><td>" + azimuth + "</td><td>" + galtitude + "</td><td>" + dtz + "</td><td>" + azshift + "</td><td>" + label + "</td></tr>";
+             $("#gazetteer tbody").append(markup);
+          });
+          // Find and remove selected table rows
+          $(".delete-row").click(function () {
+             $("#gazetteer tbody").find('input[azimuth="record"]').each(function () {
+                if($(this).is(":checked")) {
+                   $(this).parents("tr").remove();
+                }
+             });
+          });
+         });    
+          
+      </script> 
+   </head>
+   <body class="d-flex flex-column min-vh-100 bg-light">
+      <nav class="navbar navbar-expand-sm navbar-dark bg-dark text-white">
+         <div class="container">
+            <h1 class="mb-0 h5 py-1 mr-3"><i class="far fa-dot-circle white"></i>&nbsp;horiZONE</h1>
+            <div class="navbar-collapse collapse" id="collapsingNavbar2">
+               <ul class="navbar-nav">
+                  <li class="nav-item active">
+                     <a class="nav-link" href="#">create Stellarium horizons from heywhatsthat.com panoramas<span class="sr-only">Home</span></a>
+                  </li>
+               </ul>
+            </div>
+            <a href="https://github.com/briandoylegit/horiZONE" class="text-white py-1 text-decoration-none ml-auto mx-sm-0 order-0 order-sm-last" title="View project on GitHub">
+            <span class="fab fa-github fa-lg d-block" aria-hidden="true"></span>
+            </a>
+         </div>
+      </nav>
+      <div class="container flex-grow-1 flex-shrink-0 py-5">
+         <div class="mb-5 p-4 bg-white shadow-sm">
+            <div id="stepper1" class="bs-stepper">
+               <div class="bs-stepper-header" role="tablist">
+                  <div class="step" data-target="#test-l-1">
+                     <button type="button" class="step-trigger" role="tab" id="stepper1trigger1" aria-controls="test-l-1">
+                     <span class="bs-stepper-circle"><span class="fas fa-arrow-down" aria-hidden="true"></span></span>
+                     <span class="bs-stepper-label">Get Data</span>
+                     </button>
+                  </div>
+                  <div class="bs-stepper-line"></div>
+                  <div class="step" data-target="#test-l-2">
+                     <button type="button" class="step-trigger" role="tab" id="stepper1trigger2" aria-controls="test-l-2">
+                     <span class="bs-stepper-circle"><span class="fas fa-edit" aria-hidden="true"></span></span>
+                     <span class="bs-stepper-label">Add Details</span>
+                     </button>
+                  </div>
+                  <div class="bs-stepper-line"></div>
+                  <div class="step" data-target="#test-l-3">
+                     <button type="button" class="step-trigger" role="tab" id="stepper1trigger3" aria-controls="test-l-3">
+                     <span class="bs-stepper-circle"><span class="fas fa-image" aria-hidden="true"></span></span>
+                     <span class="bs-stepper-label">Labels</span>
+                     </button>
+                  </div>
+                  <div class="bs-stepper-line"></div>
+                  <div class="step" data-target="#test-l-4">
+                     <button type="button" class="step-trigger" role="tab" id="stepper1trigger4" aria-controls="test-l-4">
+                     <span class="bs-stepper-circle"><span class="fas fa-check" aria-hidden="true"></span></span>
+                     <span class="bs-stepper-label">Export Horizon</span>
+                     </button>
+                  </div>
+               </div>
+               <div class="bs-stepper-content">
+                  <form onSubmit="return false">
+                     <div id="test-l-1" role="tabpanel" class="bs-stepper-pane" aria-labelledby="stepper1trigger1">
+                        <h2>Get horizon data<button class="btn btn-warning float-right" type="button" data-toggle="collapse" data-target="#horizonHELP" aria-expanded="false" aria-controls="horizonHELP"><i class="fa fa-question"></i></button></h2>
+                        <hr/>
+                        <div class="collapse" id="horizonHELP">
+                           <div class="card card-body">
+                              <ol>
+                              <li>Visit heywhatsthat.com</li>
+                              <li>Create a new panorama, or open an existing panorama.</li>
+                              <li>Ensure the panorama is publically available. (Hint - all panoramas tab, on the map click the view location marker, select make public)</li>
+                              <li>On the view tab familiarise yourself with where to locate the url string containing the view ID (e.g. https://www.heywhatsthat.com/?view=BI3RJGCX).</li>
+                              <li>Copy the 8 character view ID from the url string (e.g. BI3RJGCX)</li>
+                              <li>Paste the view ID into the form box below, click 'Get Horizon Data' then click 'Next'</li>
+                              <ol>
+                           </div>
+                        </div>
+                        <div id="form-step-1" role="form" data-toggle="validator">
+                           <div class="form-group">
+                              <label for="name"></label>
+                              <input type="text" class="form-control" name="hwtID" id="hwtID" placeholder="Enter the 8 character heywhatsthat.com view ID e.g. BI3RJGCX" >
+                              <div class="help-block with-errors"></div>
+                           </div>
+                           <div class="form-group">
+                              <input type="button" class = "btn btn-danger" value="Get Horizon Data" id="HWTButton">
+                           </div>
+                        </div>
+                        <hr/>
+                        <button class="btn btn-success float-right" onclick="stepper1.next()">Next <i class="fa fa-chevron-right"></i></button>
+                     </div>
+                     <div class="col-xs-12" style="height:25px;"></div>
+                     <div id="test-l-2" role="tabpanel" class="bs-stepper-pane" aria-labelledby="stepper1trigger2">
+                        <h2>Update landscape details</h2>
+                        <hr/>
+                        <div id="form-step-2" role="form" data-toggle="validator">
+                           <div class="form-group">
+                              <input class="form-control col-md-6" type="input" id="authorInput" onkeyup="updateINIauthor()" placeholder="Enter 'Authored by' details here...">
+                              <div class="help-block with-errors"></div>
+                           </div>
+                           <div class="form-group">
+                              <textarea type="textarea" class="form-control" id="descriptionInput" onkeyup="updateINIdescription()" rows="3" placeholder="Enter description details here..."></textarea>
+                              <div class="help-block with-errors"></div>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <select class="form-control col-md-6" name="timezoneInput" type="input" id="timezoneInput" onChange="updateINItimezone()">
+                              <option value="" disabled selected>Select Location timezone...</option>
+                              <option>Africa/Abidjan</option>
+                              <option >Africa/Accra</option>
+                              <option >Africa/Addis_Ababa</option>
+                              <option >Africa/Algiers</option>
+                              <option >Africa/Asmara</option>
+                              <option >Africa/Bamako</option>
+                              <option >Africa/Bangui</option>
+                              <option >Africa/Banjul</option>
+                              <option >Africa/Bissau</option>
+                              <option >Africa/Blantyre</option>
+                              <option >Africa/Brazzaville</option>
+                              <option >Africa/Bujumbura</option>
+                              <option >Africa/Cairo</option>
+                              <option >Africa/Casablanca</option>
+                              <option >Africa/Ceuta</option>
+                              <option >Africa/Conakry</option>
+                              <option >Africa/Dakar</option>
+                              <option >Africa/Dar_es_Salaam</option>
+                              <option >Africa/Djibouti</option>
+                              <option >Africa/Douala</option>
+                              <option >Africa/El_Aaiun</option>
+                              <option >Africa/Freetown</option>
+                              <option >Africa/Gaborone</option>
+                              <option >Africa/Harare</option>
+                              <option >Africa/Johannesburg</option>
+                              <option >Africa/Juba</option>
+                              <option >Africa/Kampala</option>
+                              <option >Africa/Khartoum</option>
+                              <option >Africa/Kigali</option>
+                              <option >Africa/Kinshasa</option>
+                              <option >Africa/Lagos</option>
+                              <option >Africa/Libreville</option>
+                              <option >Africa/Lome</option>
+                              <option >Africa/Luanda</option>
+                              <option >Africa/Lubumbashi</option>
+                              <option >Africa/Lusaka</option>
+                              <option >Africa/Malabo</option>
+                              <option >Africa/Maputo</option>
+                              <option >Africa/Maseru</option>
+                              <option >Africa/Mbabane</option>
+                              <option >Africa/Mogadishu</option>
+                              <option >Africa/Monrovia</option>
+                              <option >Africa/Nairobi</option>
+                              <option >Africa/Ndjamena</option>
+                              <option >Africa/Niamey</option>
+                              <option >Africa/Nouakchott</option>
+                              <option >Africa/Ouagadougou</option>
+                              <option >Africa/Porto-Novo</option>
+                              <option >Africa/Sao_Tome</option>
+                              <option >Africa/Tripoli</option>
+                              <option >Africa/Tunis</option>
+                              <option >Africa/Windhoek</option>
+                              <option >America/Adak</option>
+                              <option >America/Anchorage</option>
+                              <option >America/Anguilla</option>
+                              <option >America/Antigua</option>
+                              <option >America/Araguaina</option>
+                              <option >America/Argentina/Buenos_Aires</option>
+                              <option >America/Argentina/Catamarca</option>
+                              <option >America/Argentina/Cordoba</option>
+                              <option >America/Argentina/Jujuy</option>
+                              <option >America/Argentina/La_Rioja</option>
+                              <option >America/Argentina/Mendoza</option>
+                              <option >America/Argentina/Rio_Gallegos</option>
+                              <option >America/Argentina/Salta</option>
+                              <option >America/Argentina/San_Juan</option>
+                              <option >America/Argentina/San_Luis</option>
+                              <option >America/Argentina/Tucuman</option>
+                              <option >America/Argentina/Ushuaia</option>
+                              <option >America/Aruba</option>
+                              <option >America/Asuncion</option>
+                              <option >America/Atikokan</option>
+                              <option >America/Bahia</option>
+                              <option >America/Bahia_Banderas</option>
+                              <option >America/Barbados</option>
+                              <option >America/Belem</option>
+                              <option >America/Belize</option>
+                              <option >America/Blanc-Sablon</option>
+                              <option >America/Boa_Vista</option>
+                              <option >America/Bogota</option>
+                              <option >America/Boise</option>
+                              <option >America/Cambridge_Bay</option>
+                              <option >America/Campo_Grande</option>
+                              <option >America/Cancun</option>
+                              <option >America/Caracas</option>
+                              <option >America/Cayenne</option>
+                              <option >America/Cayman</option>
+                              <option >America/Chicago</option>
+                              <option >America/Chihuahua</option>
+                              <option >America/Costa_Rica</option>
+                              <option >America/Creston</option>
+                              <option >America/Cuiaba</option>
+                              <option >America/Curacao</option>
+                              <option >America/Danmarkshavn</option>
+                              <option >America/Dawson</option>
+                              <option >America/Dawson_Creek</option>
+                              <option >America/Denver</option>
+                              <option >America/Detroit</option>
+                              <option >America/Dominica</option>
+                              <option >America/Edmonton</option>
+                              <option >America/Eirunepe</option>
+                              <option >America/El_Salvador</option>
+                              <option >America/Fortaleza</option>
+                              <option >America/Glace_Bay</option>
+                              <option >America/Godthab</option>
+                              <option >America/Goose_Bay</option>
+                              <option >America/Grand_Turk</option>
+                              <option >America/Grenada</option>
+                              <option >America/Guadeloupe</option>
+                              <option >America/Guatemala</option>
+                              <option >America/Guayaquil</option>
+                              <option >America/Guyana</option>
+                              <option >America/Halifax</option>
+                              <option >America/Havana</option>
+                              <option >America/Hermosillo</option>
+                              <option >America/Indiana/Indianapolis</option>
+                              <option >America/Indiana/Knox</option>
+                              <option >America/Indiana/Marengo</option>
+                              <option >America/Indiana/Petersburg</option>
+                              <option >America/Indiana/Tell_City</option>
+                              <option >America/Indiana/Vevay</option>
+                              <option >America/Indiana/Vincennes</option>
+                              <option >America/Indiana/Winamac</option>
+                              <option >America/Inuvik</option>
+                              <option >America/Iqaluit</option>
+                              <option >America/Jamaica</option>
+                              <option >America/Juneau</option>
+                              <option >America/Kentucky/Louisville</option>
+                              <option >America/Kentucky/Monticello</option>
+                              <option >America/Kralendijk</option>
+                              <option >America/La_Paz</option>
+                              <option >America/Lima</option>
+                              <option >America/Los_Angeles</option>
+                              <option >America/Lower_Princes</option>
+                              <option >America/Maceio</option>
+                              <option >America/Managua</option>
+                              <option >America/Manaus</option>
+                              <option >America/Marigot</option>
+                              <option >America/Martinique</option>
+                              <option >America/Matamoros</option>
+                              <option >America/Mazatlan</option>
+                              <option >America/Menominee</option>
+                              <option >America/Merida</option>
+                              <option >America/Metlakatla</option>
+                              <option >America/Mexico_City</option>
+                              <option >America/Miquelon</option>
+                              <option >America/Moncton</option>
+                              <option >America/Monterrey</option>
+                              <option >America/Montevideo</option>
+                              <option >America/Montserrat</option>
+                              <option >America/Nassau</option>
+                              <option >America/New_York</option>
+                              <option >America/Nipigon</option>
+                              <option >America/Nome</option>
+                              <option >America/Noronha</option>
+                              <option >America/North_Dakota/Beulah</option>
+                              <option >America/North_Dakota/Center</option>
+                              <option >America/North_Dakota/New_Salem</option>
+                              <option >America/Ojinaga</option>
+                              <option >America/Panama</option>
+                              <option >America/Pangnirtung</option>
+                              <option >America/Paramaribo</option>
+                              <option >America/Phoenix</option>
+                              <option >America/Port-au-Prince</option>
+                              <option >America/Port_of_Spain</option>
+                              <option >America/Porto_Velho</option>
+                              <option >America/Puerto_Rico</option>
+                              <option >America/Rainy_River</option>
+                              <option >America/Rankin_Inlet</option>
+                              <option >America/Recife</option>
+                              <option >America/Regina</option>
+                              <option >America/Resolute</option>
+                              <option >America/Rio_Branco</option>
+                              <option >America/Santa_Isabel</option>
+                              <option >America/Santarem</option>
+                              <option >America/Santiago</option>
+                              <option >America/Santo_Domingo</option>
+                              <option >America/Sao_Paulo</option>
+                              <option >America/Scoresbysund</option>
+                              <option >America/Sitka</option>
+                              <option >America/St_Barthelemy</option>
+                              <option >America/St_Johns</option>
+                              <option >America/St_Kitts</option>
+                              <option >America/St_Lucia</option>
+                              <option >America/St_Thomas</option>
+                              <option >America/St_Vincent</option>
+                              <option >America/Swift_Current</option>
+                              <option >America/Tegucigalpa</option>
+                              <option >America/Thule</option>
+                              <option >America/Thunder_Bay</option>
+                              <option >America/Tijuana</option>
+                              <option >America/Toronto</option>
+                              <option >America/Tortola</option>
+                              <option >America/Vancouver</option>
+                              <option >America/Whitehorse</option>
+                              <option >America/Winnipeg</option>
+                              <option >America/Yakutat</option>
+                              <option >America/Yellowknife</option>
+                              <option >Antarctica/Casey</option>
+                              <option >Antarctica/Davis</option>
+                              <option >Antarctica/DumontDUrville</option>
+                              <option >Antarctica/Macquarie</option>
+                              <option >Antarctica/Mawson</option>
+                              <option >Antarctica/McMurdo</option>
+                              <option >Antarctica/Palmer</option>
+                              <option >Antarctica/Rothera</option>
+                              <option >Antarctica/Syowa</option>
+                              <option >Antarctica/Troll</option>
+                              <option >Antarctica/Vostok</option>
+                              <option >Arctic/Longyearbyen</option>
+                              <option >Asia/Aden</option>
+                              <option >Asia/Almaty</option>
+                              <option >Asia/Amman</option>
+                              <option >Asia/Anadyr</option>
+                              <option >Asia/Aqtau</option>
+                              <option >Asia/Aqtobe</option>
+                              <option >Asia/Ashgabat</option>
+                              <option >Asia/Baghdad</option>
+                              <option >Asia/Bahrain</option>
+                              <option >Asia/Baku</option>
+                              <option >Asia/Bangkok</option>
+                              <option >Asia/Beirut</option>
+                              <option >Asia/Bishkek</option>
+                              <option >Asia/Brunei</option>
+                              <option >Asia/Choibalsan</option>
+                              <option >Asia/Chongqing</option>
+                              <option >Asia/Colombo</option>
+                              <option >Asia/Damascus</option>
+                              <option >Asia/Dhaka</option>
+                              <option >Asia/Dili</option>
+                              <option >Asia/Dubai</option>
+                              <option >Asia/Dushanbe</option>
+                              <option >Asia/Gaza</option>
+                              <option >Asia/Harbin</option>
+                              <option >Asia/Hebron</option>
+                              <option >Asia/Ho_Chi_Minh</option>
+                              <option >Asia/Hong_Kong</option>
+                              <option >Asia/Hovd</option>
+                              <option >Asia/Irkutsk</option>
+                              <option >Asia/Jakarta</option>
+                              <option >Asia/Jayapura</option>
+                              <option >Asia/Jerusalem</option>
+                              <option >Asia/Kabul</option>
+                              <option >Asia/Kamchatka</option>
+                              <option >Asia/Karachi</option>
+                              <option >Asia/Kashgar</option>
+                              <option >Asia/Kathmandu</option>
+                              <option >Asia/Khandyga</option>
+                              <option >Asia/Kolkata</option>
+                              <option >Asia/Krasnoyarsk</option>
+                              <option >Asia/Kuala_Lumpur</option>
+                              <option >Asia/Kuching</option>
+                              <option >Asia/Kuwait</option>
+                              <option >Asia/Macau</option>
+                              <option >Asia/Magadan</option>
+                              <option >Asia/Makassar</option>
+                              <option >Asia/Manila</option>
+                              <option >Asia/Muscat</option>
+                              <option >Asia/Nicosia</option>
+                              <option >Asia/Novokuznetsk</option>
+                              <option >Asia/Novosibirsk</option>
+                              <option >Asia/Omsk</option>
+                              <option >Asia/Oral</option>
+                              <option >Asia/Phnom_Penh</option>
+                              <option >Asia/Pontianak</option>
+                              <option >Asia/Pyongyang</option>
+                              <option >Asia/Qatar</option>
+                              <option >Asia/Qyzylorda</option>
+                              <option >Asia/Rangoon</option>
+                              <option >Asia/Riyadh</option>
+                              <option >Asia/Sakhalin</option>
+                              <option >Asia/Samarkand</option>
+                              <option >Asia/Seoul</option>
+                              <option >Asia/Shanghai</option>
+                              <option >Asia/Singapore</option>
+                              <option >Asia/Taipei</option>
+                              <option >Asia/Tashkent</option>
+                              <option >Asia/Tbilisi</option>
+                              <option >Asia/Tehran</option>
+                              <option >Asia/Thimphu</option>
+                              <option >Asia/Tokyo</option>
+                              <option >Asia/Ulaanbaatar</option>
+                              <option >Asia/Urumqi</option>
+                              <option >Asia/Ust-Nera</option>
+                              <option >Asia/Vientiane</option>
+                              <option >Asia/Vladivostok</option>
+                              <option >Asia/Yakutsk</option>
+                              <option >Asia/Yekaterinburg</option>
+                              <option >Asia/Yerevan</option>
+                              <option >Atlantic/Azores</option>
+                              <option >Atlantic/Bermuda</option>
+                              <option >Atlantic/Canary</option>
+                              <option >Atlantic/Cape_Verde</option>
+                              <option >Atlantic/Faroe</option>
+                              <option >Atlantic/Madeira</option>
+                              <option >Atlantic/Reykjavik</option>
+                              <option >Atlantic/South_Georgia</option>
+                              <option >Atlantic/St_Helena</option>
+                              <option >Atlantic/Stanley</option>
+                              <option >Australia/Adelaide</option>
+                              <option >Australia/Brisbane</option>
+                              <option >Australia/Broken_Hill</option>
+                              <option >Australia/Currie</option>
+                              <option >Australia/Darwin</option>
+                              <option >Australia/Eucla</option>
+                              <option >Australia/Hobart</option>
+                              <option >Australia/Lindeman</option>
+                              <option >Australia/Lord_Howe</option>
+                              <option >Australia/Melbourne</option>
+                              <option >Australia/Perth</option>
+                              <option >Australia/Sydney</option>
+                              <option >Europe/Amsterdam</option>
+                              <option >Europe/Andorra</option>
+                              <option >Europe/Athens</option>
+                              <option >Europe/Belgrade</option>
+                              <option >Europe/Berlin</option>
+                              <option >Europe/Bratislava</option>
+                              <option >Europe/Brussels</option>
+                              <option >Europe/Bucharest</option>
+                              <option >Europe/Budapest</option>
+                              <option >Europe/Busingen</option>
+                              <option >Europe/Chisinau</option>
+                              <option >Europe/Copenhagen</option>
+                              <option >Europe/Dublin</option>
+                              <option >Europe/Gibraltar</option>
+                              <option >Europe/Guernsey</option>
+                              <option >Europe/Helsinki</option>
+                              <option >Europe/Isle_of_Man</option>
+                              <option >Europe/Istanbul</option>
+                              <option >Europe/Jersey</option>
+                              <option >Europe/Kaliningrad</option>
+                              <option >Europe/Kiev</option>
+                              <option >Europe/Lisbon</option>
+                              <option >Europe/Ljubljana</option>
+                              <option >Europe/London</option>
+                              <option >Europe/Luxembourg</option>
+                              <option >Europe/Madrid</option>
+                              <option >Europe/Malta</option>
+                              <option >Europe/Mariehamn</option>
+                              <option >Europe/Minsk</option>
+                              <option >Europe/Monaco</option>
+                              <option >Europe/Moscow</option>
+                              <option >Europe/Oslo</option>
+                              <option >Europe/Paris</option>
+                              <option >Europe/Podgorica</option>
+                              <option >Europe/Prague</option>
+                              <option >Europe/Riga</option>
+                              <option >Europe/Rome</option>
+                              <option >Europe/Samara</option>
+                              <option >Europe/San_Marino</option>
+                              <option >Europe/Sarajevo</option>
+                              <option >Europe/Simferopol</option>
+                              <option >Europe/Skopje</option>
+                              <option >Europe/Sofia</option>
+                              <option >Europe/Stockholm</option>
+                              <option >Europe/Tallinn</option>
+                              <option >Europe/Tirane</option>
+                              <option >Europe/Uzhgorod</option>
+                              <option >Europe/Vaduz</option>
+                              <option >Europe/Vatican</option>
+                              <option >Europe/Vienna</option>
+                              <option >Europe/Vilnius</option>
+                              <option >Europe/Volgograd</option>
+                              <option >Europe/Warsaw</option>
+                              <option >Europe/Zagreb</option>
+                              <option >Europe/Zaporozhye</option>
+                              <option >Europe/Zurich</option>
+                              <option >GMT</option>
+                              <option >Indian/Antananarivo</option>
+                              <option >Indian/Chagos</option>
+                              <option >Indian/Christmas</option>
+                              <option >Indian/Cocos</option>
+                              <option >Indian/Comoro</option>
+                              <option >Indian/Kerguelen</option>
+                              <option >Indian/Mahe</option>
+                              <option >Indian/Maldives</option>
+                              <option >Indian/Mauritius</option>
+                              <option >Indian/Mayotte</option>
+                              <option >Indian/Reunion</option>
+                              <option >Pacific/Apia</option>
+                              <option >Pacific/Auckland</option>
+                              <option >Pacific/Chatham</option>
+                              <option >Pacific/Chuuk</option>
+                              <option >Pacific/Easter</option>
+                              <option >Pacific/Efate</option>
+                              <option >Pacific/Enderbury</option>
+                              <option >Pacific/Fakaofo</option>
+                              <option >Pacific/Fiji</option>
+                              <option >Pacific/Funafuti</option>
+                              <option >Pacific/Galapagos</option>
+                              <option >Pacific/Gambier</option>
+                              <option >Pacific/Guadalcanal</option>
+                              <option >Pacific/Guam</option>
+                              <option >Pacific/Honolulu</option>
+                              <option >Pacific/Johnston</option>
+                              <option >Pacific/Kiritimati</option>
+                              <option >Pacific/Kosrae</option>
+                              <option >Pacific/Kwajalein</option>
+                              <option >Pacific/Majuro</option>
+                              <option >Pacific/Marquesas</option>
+                              <option >Pacific/Midway</option>
+                              <option >Pacific/Nauru</option>
+                              <option >Pacific/Niue</option>
+                              <option >Pacific/Norfolk</option>
+                              <option >Pacific/Noumea</option>
+                              <option >Pacific/Pago_Pago</option>
+                              <option >Pacific/Palau</option>
+                              <option >Pacific/Pitcairn</option>
+                              <option >Pacific/Pohnpei</option>
+                              <option >Pacific/Port_Moresby</option>
+                              <option >Pacific/Rarotonga</option>
+                              <option >Pacific/Saipan</option>
+                              <option >Pacific/Tahiti</option>
+                              <option >Pacific/Tarawa</option>
+                              <option >Pacific/Tongatapu</option>
+                              <option >Pacific/Wake</option>
+                              <option >Pacific/Wallis</option>
+                           </select>
+                           <div class="help-block with-errors"></div>
+                        </div>
+                        <hr/>
+                        <button class="btn btn-info float-left" onclick="stepper1.previous()"><i class="fa fa-chevron-left"></i> Previous</button>
+                        <button class="btn btn-success float-right" onclick="stepper1.next()">Next <i class="fa fa-chevron-right"></i></button>
+                     </div>
+                     <div id="test-l-3" role="tabpanel" class="bs-stepper-pane" aria-labelledby="stepper1trigger3">
+                        <h2>Add/Delete locations labels<button class="btn btn-warning float-right" type="button" data-toggle="collapse" data-target="#gazetteerHELP" aria-expanded="false" aria-controls="gazetteerHELP"><i class="fa fa-question"></i></button></h2>
+                        <hr/>
+                        <div class="collapse" id="gazetteerHELP">
+                           <div class="card card-body">
+                              <p class="text-muted">
+                                 To add a custom label location:
+                              </p>
+                              <ol>
+                              <li>Within the view/panorama, ensure bearings are set to 'true'</li>
+                              <li>Within the view/panorama, ensure measurements are set to 'metric'</li>
+                              <li>Within the view/panorama, set decimal places to '5'</li>
+                              <li>Within the view/panorama, set degrees display to 'DD.DDDDDD°'</li>
+                              <li>Use the map to browse to the location of interest, click on the location.</li>
+                              <li>Locate the bearing and alt values at the bottom of the page (e.g. bearing 93.20898° 6.20747 km alt -1.30518°)</li>
+                              <li>Copy the 'alt' value into the 'altitude' form field below</li>
+                              <li>Copy the 'bearing' value into the 'azimuth' form field below</li>
+                              <li>Enter a name in the 'label' form field below</li>
+                              <li>The 'v-shift' and 'h-shift' fields are used for label positioning. Read the stellarium guide for further details. Enter a value of '10' in 'v-shift' and '0' in 'h-shift' which should be fine in most cases.</li>
+                              <li>Click 'Add Row'</li>
+							  <li>When finished adding/deleting labels click 'Next'</li>
+							  <ol>
+                           </div>
+                        </div>
+                        <div class="col-xs-12" style="height:25px;"></div>
+                        <div class="form-row">
+                           <div class="form-group col-md-2">
+                              <label for="azimuth">azimuth</label>
+                              <input type="text" class="form-control" id="azimuth" placeholder="Azimuth">
+                           </div>
+                           <div class="form-group col-md-2">
+                              <label for="altitude">altitude</label>
+                              <input type="text" class="form-control" id="galtitude" placeholder="Altitude">
+                           </div>
+                           <div class="form-group col-md-2">
+                              <label for="dtz">v-shift</label>
+                              <input type="text" class="form-control" id="dtz" placeholder="Vertical shift">
+                           </div>
+                           <div class="form-group col-md-2">
+                              <label for="azshift">h-shift</label>
+                              <input type="text" class="form-control" id="azshift" placeholder="Horizontal shift">
+                           </div>
+                           <div class="form-group col-md-4">
+                              <label for="label">label</label>
+                              <input type="text" class="form-control" id="label" placeholder="Label">
+                           </div>
+                        </div>
+                        <div>    	
+                           <input type="button" class="add-row btn btn-primary" value="Add Row">   
+                        </div>
+                        <div class="col-xs-12" style="height:50px;"></div>
+                        <div>
+                           <table id="gazetteer" class="table table-bordered">
+                              <thead class="thead-dark">
+                                 <tr>
+                                    <th style="width: 5%"></th>
+                                    <th style="width: 10%">Azimuth</th>
+                                    <th style="width: 10%">Altitude</th>
+                                    <th style="width: 10%">V-shift</th>
+                                    <th style="width: 10%">H-shift</th>
+                                    <th style="width: 55%">Label</th>
+                                 </tr>
+                              </thead>
+                              <tbody id="gazetteertbody">
+                                 <tr>
+                                    <td><input type="checkbox" azimuth="record"></td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>5</td>
+                                    <td>0</td>
+                                    <td>Stellarium Horizon created by horiZONE</td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </div>
+                        <div>	
+                           <button type="button" class="delete-row btn btn-danger">Delete Row</button>
+                        </div>
+                        <hr/>
+                        <button class="btn btn-info  float-left mt-2" onclick="stepper1.previous()"><i class="fa fa-chevron-left"></i> Previous</button>
+                        <button class="btn btn-success  float-right mt-2" onclick="stepper1.next()">Next <i class="fa fa-chevron-right"></i></button>
+                     </div>
+                     <div class="col-xs-12" style="height:25px;"></div>
+                     <div id="test-l-4" role="tabpanel" class="bs-stepper-pane text-center" aria-labelledby="stepper1trigger4">
+                        <button class="btn btn-info float-left mt-2" onclick="stepper1.previous()">Previous</button>
+                        <button type="button" class = "btn btn-danger float-right mt-2" id="horizonbutton">Export Horizon</button>
+                        <div class="col-xs-12" style="height:25px;"></div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <footer class="p-3 mt-auto bg-white shadow">
+         <div class="container">
+            <p class="text-muted text-center mb-0">
+               horiZONE created by Brian Doyle - 2019&nbsp;&nbsp;&nbsp;<i class="fa fa-envelope"></i> briandoyle.kerbstone52@gmail.com
+            </p>
+			<p class="text-muted text-center mb-0">
+               Horizons kindly supplied by <a href="http://www.heywhatsthat.com">heywhatsthat.com</a> | Copyright 2020 Michael Kosowsky | All rights reserved | Used with permission
+            </p>
+         </div>
+      </footer>
+      <!--Hidden DIV used to create ini file-->
+      <div id=hiddenDIV style="display: none;">
+         <pre id="ini">
+[landscape]
+; Horizon data kindly supplied by Heywhatsthat.com
+; Copyright 2020 Michael Kosowsky
+; All rights reserved
+; Used with permission
+name = <span class="nowrap" id="name"></span>
+author = <output id="author"></output>
+description = <output id="description"></output>
+type = polygonal
+polygonal_horizon_list = horizon.txt
+polygonal_angle_rotatez=0.00001
+ground_color = .15,.45,.45
+horizon_line_color =  .25,.15,.15
+minimal_brightness = 0.15
+<p id="inverseSwitchp"></p>
+
+[location]
+light_pollution = 7
+atmospheric_extinction_coefficient = 0.29
+atmospheric_temperature = 10
+atmospheric_pressure = -1
+planet = Earth
+latitude = <span class="nowrap" id="lat"></span>
+longitude = <span class="nowrap" id="lon"></span>
+altitude = <span class="nowrap" id="alt"></span>
+timezone = <output id="timezone"></output>
+</pre>
+      </div>
+      <!--Hidden DIV with table used to create horizon file-->
+      <div style="display: none;">
+         <table id="horizon" style="width: 100%">
+            <thead class="thead-dark">
+               <tr>
+                  <th style="width: 25%">Azimuth</th>
+                  <th style="width: 25%">Altitude</th>
+               </tr>
+            </thead>
+            <tbody id="horizontbody" class="table table-bordered">
+            </tbody>
+         </table>
+      </div>
+      <!--scripts loaded here-->
+      <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.0.0/papaparse.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.4/jszip.min.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip-utils/0.0.2/jszip-utils.min.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bs-stepper/dist/js/bs-stepper.min.js"></script>
+      <script>
+         var stepper1
+         document.addEventListener('DOMContentLoaded', function () {
+         stepper1 = new Stepper(document.querySelector('#stepper1'))
+         }) 
+      </script>
+      <script type="text/javascript">
+         $(document).ready(function () {
+         
+         });
+         
+         function hwtUpdate() {
+         hwtID = document.getElementById('hwtID').value;
+         hwtIDOut = hwtID;
+         }
+         document.getElementById("HWTButton").onclick = function () {
+         getHWTData();
+         parseHWT()
+         };
+         
+         
+         // Get location and gazetteer data (using nasty but effective CORS proxy)
+         
+         function getHWTData() {
+         
+         var hwtDATA;
+         $.getJSON("https://cors-anywhere.herokuapp.com/https://www.heywhatsthat.com/bin/result.json?id=" + hwtID + "", function (json) {
+         
+         hwtDATA = json;
+         name = (hwtDATA['name']);
+         document.getElementById("name").innerHTML = name;
+         lat = (hwtDATA['lat']);
+         document.getElementById("lat").innerHTML = lat;
+         lon = (hwtDATA['lon']);
+         document.getElementById("lon").innerHTML = lon;
+         alt = (hwtDATA['elev_amsl']);
+         document.getElementById("alt").innerHTML = alt;
+         peaks = (hwtDATA['peaks']);
+         console.log(peaks)
+         for(var i=0;i<peaks.length;i++)
+         {
+         var tr="<tr>";
+         var td1="<td><input type='checkbox' azimuth='record'></td>";
+         var td2="<td>"+peaks[i]["az"]+"</td>";
+         var td3="<td>"+peaks[i]["alt"]+"</td>";
+         var td4="<td>5</td>";
+         var td5="<td>0</td>";
+         var td6="<td>"+peaks[i]["name"]+"</td></tr>";
+         var newRowContent = (tr+td1+td2+td3+td4+td5+td6);
+         console.log(newRowContent)
+         
+         $(newRowContent).appendTo($("#gazetteertbody"));
+         
+         }
+         });
+         }
+         
+         // Get horizon data and parse (using nasty but effective CORS proxy)
+         
+         function parseHWT(url) {
+         Papa.parse("https://cors-anywhere.herokuapp.com/www.heywhatsthat.com/api/horizon.csv?id=%27," + hwtID + ",%27&resolution=.0625&src=K52&keep=1", {
+         download: true,
+         headers: true,
+         dynamicTyping: true,
+         complete: function (results) {
+         hwtArray = results.data;
+         hwtArrayEdit = [];
+         for(var i = 1; i < hwtArray.length - 1; i++) {
+            hwtArrayEdit.push(hwtArray[i]);
+            hwtArrayCol1 = hwtArrayEdit.map(function (value, index) {
+               return value[2];
+            });
+            
+            var sum = 0;
+            for(var i = 0; i < hwtArrayCol1.length; i++) {
+               sum += (hwtArrayCol1[i]);
+            }
+            var avg = sum / hwtArrayCol1.length;
+            inverseSwitch = (avg < 0) ? "polygonal_horizon_inverted = true" : "";
+            document.getElementById("inverseSwitchp").innerHTML = inverseSwitch;
+            
+         };
+         $.each(hwtArrayEdit, function (index, item) {
+            eachrow = "<tr>" +
+               "<td>" + (item[0] + 0.03125)	 + "</td>" +
+               "<td>" + item[2] + "</td>" +
+               "</tr>";
+            $('#horizontbody').append(eachrow);
+         });
+         }
+         });
+         }
+         
+         
+         var exportHorizonBlob = [];
+         
+         function export_table_to_horizoncsv(html, filename) {
+         var horizoncsv = [];
+         var table = document.querySelector('#horizon');
+         var rows = document.querySelectorAll("#horizon tr");
+         
+         for(var i = 1; i < rows.length; i++) {
+         var row = [],
+         cols = rows[i].querySelectorAll("td, th");
+         for(var j = 0; j < cols.length; j++)
+         row.push(cols[j].innerText);
+         horizoncsv.push(row.join(" "));
+         }
+         // Generate Horizon File
+         var exportHorizon = (horizoncsv.join("\n"));
+         
+         exportHorizonBlob = new Blob([exportHorizon]);
+         zip.file("horizon.txt", (exportHorizonBlob));
+         }
+         var exportGazeeteerBlob = [];
+         
+         function export_table_to_gazetteercsv(html, filename) {
+         var gazetteercsv = [];
+         var table = document.querySelector('#gazetteer');
+         var rows = table.querySelectorAll("table tr");
+         for(var i = 1; i < rows.length; i++) {
+         var row = [],
+         cols = rows[i].querySelectorAll("td, th");
+         for(var j = 1; j < cols.length; j++)
+         row.push(cols[j].innerText);
+         gazetteercsv.push(row.join(" | "));
+         }
+         // Generate Gazetteer File
+         var exportGazeeteer = (gazetteercsv.join("\r\n"));
+         
+         exportGazeeteerBlob = new Blob([exportGazeeteer]);
+         zip.file("gazetteer.en.utf8", (exportGazeeteerBlob));
+         }
+         var exportIniBlob = [];
+         
+         function exportIni() {
+         var iniText = $('#ini').text();
+         
+         exportIniBlob = new Blob([iniText], {
+         type: 'text/plain'
+         });
+         zip.file("landscape.ini", (exportIniBlob));
+         }
+         document.getElementById("horizonbutton").addEventListener("click", function () {
+         export_table_to_horizoncsv();
+         export_table_to_gazetteercsv();
+         exportIni();
+         exportzip()
+         });
+         zip = new JSZip();
+         function exportzip() {
+         zip.generateAsync({
+         type: "blob"
+         }).then(function (blob) { // 1) generate the zip file
+         saveAs(blob, "horiZONE.zip"); // 2) trigger the download
+         }, function (err) {
+         jQuery("#blob").text(err);
+         });
+         }
+      </script>
+   </body>
+</html>
